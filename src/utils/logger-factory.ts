@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { type IncomingMessage, type ServerResponse } from 'http';
 import { Params } from 'nestjs-pino';
+import pino from 'pino'; // Import langsung dari pino
 import { GenReqId, Options, type ReqId } from 'pino-http';
 import { v4 as uuidv4 } from 'uuid';
 import { AllConfigType } from '../config/config.type';
@@ -32,17 +33,10 @@ const customErrorMessage = (req, res, err) => {
 };
 
 function logServiceConfig(logService: string, isProd: boolean): Options {
-  switch (logService) {
-    case LogService.CONSOLE:
-    default:
-      return consoleLoggingConfig(isProd);
-  }
-}
-
-function consoleLoggingConfig(isProd: boolean): Options {
   if (isProd) {
     return {
       messageKey: 'msg',
+      destination: pino.destination(1), // Menulis langsung ke stdout di production
     };
   }
 
@@ -50,11 +44,7 @@ function consoleLoggingConfig(isProd: boolean): Options {
     messageKey: 'msg',
     transport: {
       target: 'pino-pretty',
-      options: {
-        singleLine: true,
-        ignore:
-          'req.id,req.method,req.url,req.headers,req.remoteAddress,req.remotePort,res.headers',
-      },
+      options: { singleLine: true },
     },
   };
 }
