@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import TypeOrmCustomLogger from 'src/utils/typeorm-custom-logger';
 import { AllConfigType } from '../config/config.type';
+import TypeOrmCustomLogger from '../utils/typeorm-custom-logger';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
