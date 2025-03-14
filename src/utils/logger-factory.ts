@@ -2,9 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { type IncomingMessage, type ServerResponse } from 'http';
 import { Params } from 'nestjs-pino';
 import { GenReqId, Options, type ReqId } from 'pino-http';
-import { AllConfigType } from 'src/config/config.type';
-import { loggingRedactPaths, LogService } from 'src/constants/app.constant';
 import { v4 as uuidv4 } from 'uuid';
+import { AllConfigType } from '../config/config.type';
+import { loggingRedactPaths, LogService } from '../constants/app.constant';
 
 const genReqId: GenReqId = (
   req: IncomingMessage,
