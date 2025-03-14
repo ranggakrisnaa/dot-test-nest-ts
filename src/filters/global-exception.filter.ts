@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { STATUS_CODES } from 'http';
-import { ErrorDetailDto } from 'src/common/interfaces/error-detail.interface';
-import { ErrorDto } from 'src/common/interfaces/error.interface';
-import { AllConfigType } from 'src/config/config.type';
-import { constraintErrors } from 'src/constants/constraint-error.constant';
-import { ErrorCode } from 'src/constants/error-constant';
-import { ValidationException } from 'src/exceptions/validation.exception';
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
+import { ErrorDetailDto } from '../common/interfaces/error-detail.interface';
+import { ErrorDto } from '../common/interfaces/error.interface';
+import { AllConfigType } from '../config/config.type';
+import { constraintErrors } from '../constants/constraint-error.constant';
+import { ErrorCode } from '../constants/error-constant';
+import { ValidationException } from '../exceptions/validation.exception';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

@@ -2,10 +2,10 @@ import { ModuleMetadata } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
-import appConfig from 'src/config/app.config';
-import databaseConfig from 'src/database/config/database.config';
 import { TypeOrmConfigService } from 'src/database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import appConfig from '../config/app.config';
+import databaseConfig from '../database/config/database.config';
 import loggerFactory from './logger-factory';
 
 function generateModulesSet() {

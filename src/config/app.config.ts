@@ -11,8 +11,8 @@ import {
   Min,
 } from 'class-validator';
 import * as process from 'node:process';
-import validateConfig from 'src/utils/validate-config';
 import { Environment, LogService } from '../constants/app.constant';
+import validateConfig from '../utils/validate-config';
 import { AppConfig } from './app-config.type';
 
 class EnvironmentVariablesValidator {
