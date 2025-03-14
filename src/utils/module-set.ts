@@ -2,6 +2,7 @@ import { ModuleMetadata } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
+import { ApiModule } from 'src/api/api.module';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import appConfig from '../config/app.config';
 import databaseConfig from '../database/config/database.config';
@@ -34,7 +35,7 @@ function generateModulesSet() {
     },
   });
 
-  return imports.concat([loggerModule, dbModule]);
+  return imports.concat([loggerModule, dbModule, ApiModule]);
 }
 
 export default generateModulesSet;
