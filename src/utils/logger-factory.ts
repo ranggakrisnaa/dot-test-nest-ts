@@ -31,15 +31,21 @@ const customErrorMessage = (req, res, err) => {
   return `[${req.id || '*'}] "${req.method} ${req.url}" ${res.statusCode} - "${req.headers['host']}" "${req.headers['user-agent']}" - message: ${err.message}`;
 };
 
-function logServiceConfig(logService: string): Options {
+function logServiceConfig(logService: string, isProd: boolean): Options {
   switch (logService) {
     case LogService.CONSOLE:
     default:
-      return consoleLoggingConfig();
+      return consoleLoggingConfig(isProd);
   }
 }
 
-function consoleLoggingConfig(): Options {
+function consoleLoggingConfig(isProd: boolean): Options {
+  if (isProd) {
+    return {
+      messageKey: 'msg',
+    };
+  }
+
   return {
     messageKey: 'msg',
     transport: {
@@ -56,9 +62,11 @@ function consoleLoggingConfig(): Options {
 async function loggerFactory(
   configService: ConfigService<AllConfigType>,
 ): Promise<Params> {
-  const logLevel = configService.get('app.logLevel', { infer: true });
-  const logService = configService.get('app.logService', { infer: true });
-  const isDebug = configService.get('app.debug', { infer: true });
+  const logLevel = configService.get('app.logLevel', { infer: true }) || 'info';
+  const logService =
+    configService.get('app.logService', { infer: true }) || LogService.CONSOLE;
+  const isDebug = configService.get('app.debug', { infer: true }) || false;
+  const isProd = process.env.NODE_ENV === 'production';
 
   const pinoHttpOptions: Options = {
     level: logLevel,
@@ -78,7 +86,7 @@ async function loggerFactory(
       paths: loggingRedactPaths,
       censor: '**GDPR COMPLIANT**',
     },
-    ...logServiceConfig(logService),
+    ...logServiceConfig(logService, isProd),
   };
 
   return {
