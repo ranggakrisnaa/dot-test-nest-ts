@@ -19,15 +19,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService<AllConfigType>);
   const port =
     process.env.PORT || configService.getOrThrow('app.port', { infer: true });
-  const corsOrigin = configService.getOrThrow('app.corsOrigin', {
-    infer: true,
-  });
 
   app.setGlobalPrefix(
     configService.getOrThrow('app.apiPrefix', { infer: true }),
   );
   app.enableCors({
-    origin: corsOrigin,
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
     credentials: true,
