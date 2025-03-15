@@ -12,6 +12,7 @@ import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
 import { AllConfigType } from './config/config.type';
 import { GlobalExceptionFilter } from './filters/global-exception.filter';
+import { SuccessInterceptor } from './shared/success-response.interceptor';
 dotenv.config();
 
 async function bootstrap() {
@@ -33,6 +34,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
   app.useGlobalFilters(new GlobalExceptionFilter(configService));
+  app.useGlobalInterceptors(new SuccessInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
