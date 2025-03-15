@@ -73,6 +73,7 @@ function consoleLoggingConfig(isProd: boolean): Options {
   };
 }
 
+
 async function loggerFactory(
   configService: ConfigService<AllConfigType>,
 ): Promise<Params> {

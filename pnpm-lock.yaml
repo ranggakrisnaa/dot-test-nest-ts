@@ -53,6 +53,9 @@ importers:
       pg:
         specifier: ^8.14.0
         version: 8.14.0
+      pino:
+        specifier: ^9.6.0
+        version: 9.6.0
       pino-http:
         specifier: ^10.4.0
         version: 10.4.0
