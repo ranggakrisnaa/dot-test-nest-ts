@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { type IncomingMessage, type ServerResponse } from 'http';
 import { Params } from 'nestjs-pino';
+import pino from 'pino';
 import { GenReqId, Options, type ReqId } from 'pino-http';
+import pretty from 'pino-pretty';
 import { v4 as uuidv4 } from 'uuid';
 import { AllConfigType } from '../config/config.type';
 import { loggingRedactPaths, LogService } from '../constants/app.constant';
@@ -40,10 +42,22 @@ function logServiceConfig(logService: string, isProd: boolean): Options {
 }
 
 function consoleLoggingConfig(isProd: boolean): Options {
+  const stream = pretty({
+    levelFirst: true,
+    colorize: true,
+    ignore: 'time,hostname,pid',
+  });
+
+  const logger = pino(
+    {
+      name: 'MyLogger',
+      level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+    },
+    stream,
+  );
+
   if (isProd) {
-    return {
-      messageKey: 'msg',
-    };
+    return logger;
   }
 
   return {

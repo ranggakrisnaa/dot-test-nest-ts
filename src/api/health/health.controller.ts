@@ -29,7 +29,6 @@ export class HealthController {
   @Get('ping')
   PingCheck(): Record<string, any> {
     return {
-      success: true,
       statusCode: HttpStatus.OK,
       message: 'Successfully ping server.',
     };

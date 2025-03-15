@@ -11,8 +11,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { STATUS_CODES } from 'http';
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
-import { ErrorDetailDto } from '../common/interfaces/error-detail.interface';
-import { ErrorDto } from '../common/interfaces/error.interface';
+import { IErrorDetail } from '../common/interfaces/error-detail.interface';
+import { IError } from '../common/interfaces/error.interface';
 import { AllConfigType } from '../config/config.type';
 import { constraintErrors } from '../constants/constraint-error.constant';
 import { ErrorCode } from '../constants/error-constant';
@@ -31,7 +31,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     this.debug = this.configService.getOrThrow('app.debug', { infer: true });
 
-    let error: ErrorDto;
+    let error: IError;
 
     if (exception instanceof UnprocessableEntityException) {
       error = this.handleUnprocessableEntityException(exception);
@@ -62,11 +62,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
    * Check the request payload
    * Validate the input
    * @param exception UnprocessableEntityException
-   * @returns ErrorDto
+   * @returns IError
    */
   private handleUnprocessableEntityException(
     exception: UnprocessableEntityException,
-  ): ErrorDto {
+  ): IError {
     const r = exception.getResponse() as { message: ValidationError[] };
     const statusCode = exception.getStatus();
 
@@ -86,9 +86,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Handles validation errors
    * @param exception ValidationException
-   * @returns ErrorDto
+   * @returns IError
    */
-  private handleValidationException(exception: ValidationException): ErrorDto {
+  private handleValidationException(exception: ValidationException): IError {
     const r = exception.getResponse() as {
       errorCode: ErrorCode;
       message: string;
@@ -112,9 +112,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Handles HttpException
    * @param exception HttpException
-   * @returns ErrorDto
+   * @returns IError
    */
-  private handleHttpException(exception: HttpException): ErrorDto {
+  private handleHttpException(exception: HttpException): IError {
     const statusCode = exception.getStatus();
     const errorRes = {
       timestamp: new Date().toISOString(),
@@ -131,9 +131,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Handles QueryFailedError
    * @param error QueryFailedError
-   * @returns ErrorDto
+   * @returns IError
    */
-  private handleQueryFailedError(error: QueryFailedError): ErrorDto {
+  private handleQueryFailedError(error: QueryFailedError): IError {
     const r = error as QueryFailedError & { constraint?: string };
     const { status, message } = r.constraint?.startsWith('UQ')
       ? {
@@ -149,7 +149,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode: status,
       error: STATUS_CODES[status],
       message,
-    } as unknown as ErrorDto;
+    } as unknown as IError;
 
     this.logger.error(error);
 
@@ -159,16 +159,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Handles EntityNotFoundError when using findOrFail() or findOneOrFail() from TypeORM
    * @param error EntityNotFoundError
-   * @returns ErrorDto
+   * @returns IError
    */
-  private handleEntityNotFoundError(error: EntityNotFoundError): ErrorDto {
+  private handleEntityNotFoundError(error: EntityNotFoundError): IError {
     const status = HttpStatus.NOT_FOUND;
     const errorRes = {
       timestamp: new Date().toISOString(),
       statusCode: status,
       error: STATUS_CODES[status],
       message: 'Entity Not Found',
-    } as unknown as ErrorDto;
+    } as unknown as IError;
 
     this.logger.debug(error);
 
@@ -178,9 +178,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Handles generic errors
    * @param error Error
-   * @returns ErrorDto
+   * @returns IError
    */
-  private handleError(error: Error): ErrorDto {
+  private handleError(error: Error): IError {
     const statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     const errorRes = {
       timestamp: new Date().toISOString(),
@@ -197,20 +197,20 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   /**
    * Extracts error details from ValidationError[]
    * @param errors ValidationError[]
-   * @returns ErrorDetailDto[]
+   * @returns IErrorDetail[]
    */
   private extractValidationErrorDetails(
     errors: ValidationError[],
-  ): ErrorDetailDto[] {
+  ): IErrorDetail[] {
     const extractErrors = (
       error: ValidationError,
       parentProperty: string = '',
-    ): ErrorDetailDto[] => {
+    ): IErrorDetail[] => {
       const propertyPath = parentProperty
         ? `${parentProperty}.${error.property}`
         : error.property;
 
-      const currentErrors: ErrorDetailDto[] = Object.entries(
+      const currentErrors: IErrorDetail[] = Object.entries(
         error.constraints || {},
       ).map(([code, message]) => ({
         property: propertyPath,
@@ -218,7 +218,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message,
       }));
 
-      const childErrors: ErrorDetailDto[] =
+      const childErrors: IErrorDetail[] =
         error.children?.flatMap((childError) =>
           extractErrors(childError, propertyPath),
         ) || [];

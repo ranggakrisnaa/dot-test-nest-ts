@@ -1,12 +1,12 @@
-import { ErrorDetailDto } from './error-detail.interface';
+import { IErrorDetail } from './error-detail.interface';
 
-export interface ErrorDto {
+export interface IError {
   timestamp: string;
   statusCode: number;
   error: string;
   errorCode?: string;
   message: string;
-  details?: ErrorDetailDto[];
+  details?: IErrorDetail[];
   stack?: string;
   trace?: Error | unknown;
 }
