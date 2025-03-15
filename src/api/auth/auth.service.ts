@@ -15,12 +15,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { UUID } from 'crypto';
 import { Request } from 'express';
 import ms, { StringValue } from 'ms';
+import { IUser } from 'src/database/interfaces/user.interface';
 import { DataSource, Repository } from 'typeorm';
 import { ISuccessResponse } from '../../common/interfaces/success.interface';
 import { AllConfigType } from '../../config/config.type';
 import { AddressEntity } from '../../database/entities/address.entity';
 import { CompanyEntity } from '../../database/entities/company.entity';
 import { SessionEntity } from '../../database/entities/session.entity';
+import { ApiService } from '../../shared/http/api.service';
 import { hashPassword, verifyPassword } from '../../utils/password.util';
 import { UserRepository } from '../user/user.repository';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -42,6 +44,7 @@ export class AuthService {
     private readonly dataSource: DataSource,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<AllConfigType>,
+    private readonly apiService: ApiService,
   ) {}
 
   async signIn(
@@ -95,7 +98,7 @@ export class AuthService {
     }
   }
 
-  async signUp(reqBody: SignUpDto) {
+  async signUp(reqBody: SignUpDto): Promise<ISuccessResponse<null>> {
     try {
       return this.dataSource.transaction(async (manager) => {
         const { company, address, ...req } = reqBody;
@@ -105,10 +108,13 @@ export class AuthService {
         });
         if (foundUser) throw new ConflictException('User data already exists.');
 
-        const newUser = manager.create(this.userRepo.target, {
-          ...req,
-          password: await hashPassword(req.password),
-        });
+        const [, newUser] = await Promise.all([
+          this.apiService.post<IUser>('/users', reqBody),
+          manager.create(this.userRepo.target, {
+            ...req,
+            password: await hashPassword(req.password),
+          }),
+        ]);
         const user = await manager.save(this.userRepo.target, newUser);
 
         await Promise.all([
@@ -124,7 +130,11 @@ export class AuthService {
             }),
         ]);
 
-        return { message: 'User sign up successfully.' };
+        return {
+          statusCode: HttpStatus.OK,
+          data: null,
+          message: 'User sign up successfully.',
+        };
       });
     } catch (err: unknown) {
       if (err instanceof Error)
@@ -233,7 +243,7 @@ export class AuthService {
     }
   }
 
-  async logout(userId: string): Promise<ISuccessResponse<any>> {
+  async logout(userId: string): Promise<ISuccessResponse<null>> {
     console.log(userId);
 
     const foundSession = await this.sessionRepo.findBy({

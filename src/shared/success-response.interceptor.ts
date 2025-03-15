@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ISuccessResponse } from '../common/interfaces/success.interface';
 
-
 @Injectable()
 export class SuccessInterceptor<T>
   implements NestInterceptor<T, ISuccessResponse<T>>
