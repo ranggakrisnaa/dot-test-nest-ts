@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { type IncomingMessage, type ServerResponse } from 'http';
 import { Params } from 'nestjs-pino';
-import pino from 'pino'; // Import langsung dari pino
 import { GenReqId, Options, type ReqId } from 'pino-http';
 import { v4 as uuidv4 } from 'uuid';
 import { AllConfigType } from '../config/config.type';
@@ -36,7 +35,6 @@ function logServiceConfig(logService: string, isProd: boolean): Options {
   if (isProd) {
     return {
       messageKey: 'msg',
-      destination: pino.destination(1), // Menulis langsung ke stdout di production
     };
   }
 
