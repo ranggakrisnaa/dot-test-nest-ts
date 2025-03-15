@@ -1,7 +1,7 @@
 export interface ISuccessResponse<T> {
-  timestamp: string;
+  timestamp?: string;
   statusCode: number;
-  status: string;
+  status?: string;
   data: T;
   message?: string;
 }

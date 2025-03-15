@@ -8,7 +8,7 @@ export class CreateGeoLocationsTable1741967451113
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             CREATE TABLE "geo_locations" (
-                "id" uuid NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "address_id" uuid NOT NULL,
                 "latitude" numeric(10, 6) NOT NULL,
                 "longtitude" numeric(10, 6) NOT NULL,
@@ -25,11 +25,11 @@ export class CreateGeoLocationsTable1741967451113
         `);
     await queryRunner.query(`
             ALTER TABLE "geo_locations"
-            ADD CONSTRAINT "id" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "id" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE "addresses"
-            ADD CONSTRAINT "id" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "id" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
   }
 

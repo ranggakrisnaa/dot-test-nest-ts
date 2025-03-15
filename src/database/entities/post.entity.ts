@@ -5,7 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IComment } from '../interfaces/comment.interface';
 import { IPost } from '../interfaces/post.interface';
@@ -16,7 +16,7 @@ import { UserEntity } from './user.entity';
 
 @Entity('posts')
 export class PostEntity extends BaseEntity implements IPost {
-  @PrimaryColumn('uuid', {
+  @PrimaryGeneratedColumn('uuid', {
     primaryKeyConstraintName: 'PK_post_id',
   })
   id: UUID;

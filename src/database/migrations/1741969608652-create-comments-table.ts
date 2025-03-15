@@ -9,7 +9,7 @@ export class CreateCommentsTable1741969608652 implements MigrationInterface {
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "deleted_at" TIMESTAMP WITH TIME ZONE,
-                "id" uuid NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "post_id" uuid NOT NULL,
                 "name" character varying(100) NOT NULL,
                 "email" character varying(150) NOT NULL,

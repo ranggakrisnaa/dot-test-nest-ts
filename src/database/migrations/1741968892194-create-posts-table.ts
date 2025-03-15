@@ -9,7 +9,7 @@ export class CreatePostsTable1741968892194 implements MigrationInterface {
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "deleted_at" TIMESTAMP WITH TIME ZONE,
-                "id" uuid NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "user_id" uuid NOT NULL,
                 "title" character varying(150) NOT NULL,
                 "body" text NOT NULL,

@@ -9,14 +9,14 @@ export class CreateCompaniesTable1741968309727 implements MigrationInterface {
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "deleted_at" TIMESTAMP WITH TIME ZONE,
-                "id" uuid NOT NULL,
+                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "user_id" uuid,
                 CONSTRAINT "PK_company_id" PRIMARY KEY ("id")
             )
         `);
     await queryRunner.query(`
             ALTER TABLE "companies"
-            ADD CONSTRAINT "FK_ee0839cba07cb0c52602021ad4b" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_ee0839cba07cb0c52602021ad4b" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
   }
 

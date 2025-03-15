@@ -1,5 +1,11 @@
 import { UUID } from 'crypto';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IComment } from '../interfaces/comment.interface';
 import { IPost } from '../interfaces/post.interface';
 import { BaseEntity } from './base.entity';
@@ -7,7 +13,7 @@ import { PostEntity } from './post.entity';
 
 @Entity('comments')
 export class CommentEntity extends BaseEntity implements IComment {
-  @PrimaryColumn('uuid', {
+  @PrimaryGeneratedColumn('uuid', {
     primaryKeyConstraintName: 'PK_comment_id',
   })
   id: UUID;
