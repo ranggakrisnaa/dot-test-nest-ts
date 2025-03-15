@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ApiModule } from '../api/api.module';
+import authConfig from '../api/auth/config/auth-config';
 import appConfig from '../config/app.config';
 import databaseConfig from '../database/config/database.config';
 import { TypeOrmConfigService } from '../database/typeorm-config.service';
@@ -13,7 +14,7 @@ function generateModulesSet() {
   const imports: ModuleMetadata['imports'] = [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, authConfig],
       envFilePath: ['.env'],
     }),
   ];

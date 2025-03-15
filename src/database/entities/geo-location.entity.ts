@@ -5,7 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IAddress } from '../interfaces/address.interface';
 import { IGeoLocation } from '../interfaces/geo-location.interface';
@@ -13,7 +13,7 @@ import { AddressEntity } from './address.entity';
 
 @Entity('geo_locations')
 export class GeoLocationEntity extends BaseEntity implements IGeoLocation {
-  @PrimaryColumn('uuid', {
+  @PrimaryGeneratedColumn('uuid', {
     primaryKeyConstraintName: 'PK geo_location_id',
   })
   id: UUID;

@@ -9,7 +9,8 @@ import {
 import { STATUS_CODES } from 'http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ISuccessResponse } from 'src/common/interfaces/success.interface';
+import { ISuccessResponse } from '../common/interfaces/success.interface';
+
 
 @Injectable()
 export class SuccessInterceptor<T>
@@ -41,11 +42,14 @@ export class SuccessInterceptor<T>
           data = cleanData;
         }
 
+        const responseData =
+          typeof data === 'object' && 'data' in data ? data.data : data;
+
         return {
           timestamp: new Date().toISOString(),
           statusCode,
           status: STATUS_CODES[statusCode],
-          data,
+          data: responseData,
           message: responseMessage,
         };
       }),
