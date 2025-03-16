@@ -53,7 +53,7 @@ Aplikasi akan berjalan di `http://localhost:3000`.
 
 ## 3. Endpoint API
 
-API ini menyediakan beberapa endpoint utama. Dokumentasi lengkap tersedia di [Documentation]([https://documenter.getpostman.com/view/29492816/2s9YsGhYfA](https://github.com/ranggakrisnaa/dot-test-nest-ts/blob/main/documentation-api.html)).
+API ini menyediakan beberapa endpoint utama. Dokumentasi lengkap tersedia di [Documentation](https://github.com/ranggakrisnaa/dot-test-nest-ts/blob/main/documentation-api.html)
 
 ### 3.1 Autentikasi
 
