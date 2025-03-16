@@ -46,9 +46,7 @@ Sebelum memulai, pastikan Anda telah menginstal **Node.js**, **npm** atau **yarn
    ```
 7. Jalankan aplikasi:
    ```bash
-   yarn start
-   # atau
-   npm start
+   pnpm start:dev
    ```
 
 Aplikasi akan berjalan di `http://localhost:3000`.
