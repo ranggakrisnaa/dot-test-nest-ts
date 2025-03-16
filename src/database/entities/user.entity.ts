@@ -8,13 +8,11 @@ import {
 } from 'typeorm';
 import { IAddress } from '../interfaces/address.interface';
 import { ICompany } from '../interfaces/company.interface';
-import { IPost } from '../interfaces/post.interface';
 import { ISession } from '../interfaces/session.interface';
 import { IUser } from '../interfaces/user.interface';
 import { AddressEntity } from './address.entity';
 import { BaseEntity } from './base.entity';
 import { CompanyEntity } from './company.entity';
-import { PostEntity } from './post.entity';
 import { SessionEntity } from './session.entity';
 
 @Entity('users')
@@ -49,9 +47,6 @@ export class UserEntity extends BaseEntity implements IUser {
 
   @OneToMany(() => CompanyEntity, (company) => company.user)
   company: ICompany[];
-
-  @OneToMany(() => PostEntity, (post) => post.user)
-  post: IPost[];
 
   @OneToMany(() => SessionEntity, (session) => session.user)
   session: ISession[];
