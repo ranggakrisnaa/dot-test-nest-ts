@@ -1,6 +1,6 @@
 # Dokumentasi API - User Management Api 
 
-API ini berfungsi Managemenet CRUD User dengan implementasi data dari api https://jsonplaceholder.typicode.com/
+API ini berfungsi Managemenet CRUD User dengan implementasi data dari api [disini](https://jsonplaceholder.typicode.com)
 
 ## 1. Instalasi
 
