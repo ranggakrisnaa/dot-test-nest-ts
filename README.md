@@ -1,4 +1,4 @@
-# Dokumentasi API - User Management Api 
+# Dokumentasi API - User Management Api
 
 API ini berfungsi Managemenet CRUD User dengan implementasi data dari api [disini](https://jsonplaceholder.typicode.com)
 
@@ -18,11 +18,9 @@ Sebelum memulai, pastikan Anda telah menginstal **Node.js**, **npm** atau **yarn
    ```
 3. Install semua dependensi yang diperlukan:
    ```bash
-   yarn install
-   # atau jika menggunakan npm
-   npm install
+   pnpm install
    ```
-4. Buat file `.env` di root proyek dan isi dengan konfigurasi database serta variabel lingkungan lainnya, contoh:
+4. Buat file `.env` di root proyek dan isi dengan konfigurasi database serta variabel dari `.env.example`, contoh:
    ```plaintext
    DB_HOST=localhost
    DB_PORT=5432
@@ -33,12 +31,18 @@ Sebelum memulai, pastikan Anda telah menginstal **Node.js**, **npm** atau **yarn
    PORT=3001
    JWT_SECRET=your_jwt_secret
    ```
-5. Pastikan database telah dibuat sesuai dengan konfigurasi di `.env`.
+   atau cara cepatnya: 
+```plaintext
+   cp .env.example .env
+   ```
+5. Pastikan semua variabel telah dibuat sesuai dengan konfigurasi di `.env`.
 6. Jalankan migrasi database:
    ```bash
-   yarn migrate
-   # atau
-   npm run migrate
+   pnpm migration:run
+   ```
+6. Jalankan seed database:
+   ```bash
+   pnpm seed:run
    ```
 7. Jalankan aplikasi:
    ```bash
@@ -47,8 +51,7 @@ Sebelum memulai, pastikan Anda telah menginstal **Node.js**, **npm** atau **yarn
    npm start
    ```
 
-Aplikasi akan berjalan di `http://localhost:3001`.
-
+Aplikasi akan berjalan di `http://localhost:3000`.
 
 ## 3. Endpoint API
 
@@ -82,4 +85,3 @@ API ini menyediakan beberapa endpoint utama. Dokumentasi lengkap tersedia di [Po
 - **Cache Manager** - Untuk caching data user
 
 ---
-
