@@ -168,10 +168,12 @@ export class UserService {
       reqBody.password = await hashPassword(reqBody.password);
 
     Object.assign(user, reqBody);
-    await this.userRepo.save(user);
-
-    await this.cacheManager.del(`${this.USER_DETAIL_CACHE_PREFIX}${userId}`);
-    await this.cacheManager.del(this.ALL_USERS_CACHE_KEY);
+    await Promise.all([
+      this.userRepo.save(user),
+      this.apiService.patch<IUser>(`/users/${userId}`, reqBody),
+      this.cacheManager.del(`${this.USER_DETAIL_CACHE_PREFIX}${userId}`),
+      this.cacheManager.del(this.ALL_USERS_CACHE_KEY),
+    ]);
 
     return {
       statusCode: HttpStatus.OK,
@@ -186,10 +188,12 @@ export class UserService {
     if (!user) {
       throw new BadRequestException('User not found.');
     }
-
-    await this.userRepo.softDelete({ id: userId as UUID });
-    await this.cacheManager.del(`${this.USER_DETAIL_CACHE_PREFIX}${userId}`);
-    await this.cacheManager.del(this.ALL_USERS_CACHE_KEY);
+    await Promise.all([
+      this.userRepo.softDelete({ id: userId as UUID }),
+      this.cacheManager.del(`${this.USER_DETAIL_CACHE_PREFIX}${userId}`),
+      this.cacheManager.del(this.ALL_USERS_CACHE_KEY),
+      this.apiService.delete<IUser>(`/users/${userId}`),
+    ]);
 
     return {
       statusCode: HttpStatus.OK,
