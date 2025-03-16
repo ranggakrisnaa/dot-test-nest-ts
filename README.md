@@ -32,7 +32,7 @@ Sebelum memulai, pastikan Anda telah menginstal **Node.js**, **npm** atau **yarn
    JWT_SECRET=your_jwt_secret
    ```
    atau cara cepatnya: 
-```plaintext
+   ```plaintext
    cp .env.example .env
    ```
 5. Pastikan semua variabel telah dibuat sesuai dengan konfigurasi di `.env`.
