@@ -11,6 +11,8 @@ export class CreateCompaniesTable1741968309727 implements MigrationInterface {
                 "deleted_at" TIMESTAMP WITH TIME ZONE,
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "user_id" uuid,
+                "catch_phrase" character varying(150) NOT NULL,
+                "bs" character varying(100) NOT NULL,
                 CONSTRAINT "PK_company_id" PRIMARY KEY ("id")
             )
         `);
