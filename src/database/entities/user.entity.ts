@@ -44,27 +44,15 @@ export class UserEntity extends BaseEntity implements IUser {
   @Column({ type: 'varchar', length: 150 })
   website: string;
 
-  @OneToMany(() => AddressEntity, (address) => address.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  address: IAddress[];
+  @OneToMany(() => AddressEntity, (address) => address.user)
+  address: IAddress;
 
-  @OneToMany(() => CompanyEntity, (company) => company.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => CompanyEntity, (company) => company.user)
   company: ICompany[];
 
-  @OneToMany(() => PostEntity, (post) => post.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => PostEntity, (post) => post.user)
   post: IPost[];
 
-  @OneToMany(() => SessionEntity, (session) => session.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => SessionEntity, (session) => session.user)
   session: ISession[];
 }

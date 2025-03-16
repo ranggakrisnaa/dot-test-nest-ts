@@ -99,46 +99,68 @@ export class AuthService {
   }
 
   async signUp(reqBody: SignUpDto): Promise<ISuccessResponse<null>> {
+    const queryRunner = this.dataSource.createQueryRunner();
+
     try {
-      return this.dataSource.transaction(async (manager) => {
-        const { company, address, ...req } = reqBody;
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
 
-        const foundUser = await manager.findOne(this.userRepo.target, {
+      const { company, address, ...req } = reqBody;
+
+      const foundUser = await queryRunner.manager.findOne(
+        this.userRepo.target,
+        {
           where: { email: req.email },
-        });
-        if (foundUser) throw new ConflictException('User data already exists.');
+        },
+      );
 
-        const [, newUser] = await Promise.all([
-          this.apiService.post<IUser>('/users', reqBody),
-          manager.create(this.userRepo.target, {
-            ...req,
-            password: await hashPassword(req.password),
-          }),
-        ]);
-        const user = await manager.save(this.userRepo.target, newUser);
+      if (foundUser) throw new ConflictException('User data already exists.');
 
-        await Promise.all([
+      const [, newUser] = await Promise.all([
+        this.apiService.post<IUser>('/users', reqBody),
+        queryRunner.manager.create(this.userRepo.target, {
+          ...req,
+          password: await hashPassword(req.password),
+        }),
+      ]);
+
+      const user = await queryRunner.manager.save(
+        this.userRepo.target,
+        newUser,
+      );
+
+      await Promise.all(
+        [
           company &&
-            manager.insert(this.companyRepo.target, {
+            queryRunner.manager.insert(this.companyRepo.target, {
               ...company,
               userId: user.id,
             }),
-          address &&
-            manager.insert(this.addressRepo.target, {
-              ...address,
-              userId: user.id,
-            }),
-        ]);
 
-        return {
-          statusCode: HttpStatus.OK,
-          data: null,
-          message: 'User sign up successfully.',
-        };
-      });
+          (async () => {
+            if (address) {
+              await queryRunner.manager.insert(this.addressRepo.target, {
+                ...address,
+                userId: user.id,
+              });
+            }
+          })(),
+        ].filter(Boolean),
+      );
+
+      await queryRunner.commitTransaction();
+
+      return {
+        statusCode: HttpStatus.OK,
+        data: null,
+        message: 'User sign up successfully.',
+      };
     } catch (err: unknown) {
+      await queryRunner.rollbackTransaction();
       if (err instanceof Error)
         throw new InternalServerErrorException(err.message);
+    } finally {
+      await queryRunner.release();
     }
   }
 

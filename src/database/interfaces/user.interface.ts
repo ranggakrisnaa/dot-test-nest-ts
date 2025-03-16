@@ -12,7 +12,7 @@ export interface IUser {
   password: string;
   phone: string;
   website: string;
-  address: IAddress[];
+  address: IAddress;
   company: ICompany[];
   post: IPost[];
   session: ISession[];
