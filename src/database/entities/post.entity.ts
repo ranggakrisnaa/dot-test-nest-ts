@@ -4,14 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IComment } from '../interfaces/comment.interface';
 import { IPost } from '../interfaces/post.interface';
 import { IUser } from '../interfaces/user.interface';
 import { BaseEntity } from './base.entity';
-import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
 
 @Entity('posts')
@@ -36,7 +33,4 @@ export class PostEntity extends BaseEntity implements IPost {
   })
   @ManyToOne(() => UserEntity, (user) => user.post)
   user: IUser;
-
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
-  comment: IComment[];
 }

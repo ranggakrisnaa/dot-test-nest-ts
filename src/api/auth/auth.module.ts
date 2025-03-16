@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApiService } from 'src/shared/http/api.service';
 import { AddressEntity } from '../../database/entities/address.entity';
 import { CompanyEntity } from '../../database/entities/company.entity';
 import { SessionEntity } from '../../database/entities/session.entity';
@@ -20,6 +21,6 @@ import { AuthService } from './auth.service';
     JwtModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserRepository],
+  providers: [AuthService, UserRepository, ApiService],
 })
 export class AuthModule {}

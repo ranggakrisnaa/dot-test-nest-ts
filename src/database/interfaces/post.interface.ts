@@ -1,5 +1,4 @@
 import { UUID } from 'crypto';
-import { IComment } from './comment.interface';
 import { IUser } from './user.interface';
 
 export interface IPost {
@@ -8,5 +7,4 @@ export interface IPost {
   title: string;
   body: string;
   user: IUser;
-  comment: IComment[];
 }
